@@ -1,7 +1,7 @@
 resource "helm_release" "promethius" {
-    name             = "promethius"
+    name             = "prometheus"
     repository       = "https://prometheus-community.github.io/helm-charts"
-    chart            = "prometheus-community/prometheus"
+    chart            = "prometheus"
     namespace        = "monitoring"
     create_namespace = true
 }
@@ -10,7 +10,7 @@ resource "helm_release" "grafana" {
     name              = "Grafana"
     namespace         = "monitoring"
     repository        = "https://grafana.github.io/helm-charts "
-    chart             = "grafana/grafana"
+    chart             = "grafana"
     create_namespace  = true
 
     values = [
