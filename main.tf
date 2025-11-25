@@ -7,7 +7,7 @@ resource "helm_release" "promethius" {
 }
 
 resource "helm_release" "grafana" {
-    name              = "Grafana"
+    name              = "grafana"
     namespace         = "monitoring"
     repository        = "https://grafana.github.io/helm-charts"
     chart             = "grafana"
