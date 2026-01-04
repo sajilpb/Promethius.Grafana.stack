@@ -16,6 +16,12 @@ helm repo update
 helm install prometheus prometheus-community/prometheus
 ```
 
+if you want to add kube-prometheus stack and dont need a standalone grafana use below. which will wire automatically prometheus and data source
+
+```bash
+helm install prometheus prometheus-community/kube-prometheus-stack -n monitoring --create-namespace
+```
+
 Expose Prometheus (port-forward example):
 
 ```bash

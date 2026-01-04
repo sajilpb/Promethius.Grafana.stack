@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cloudwatch-exporter
+  namespace: monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cloudwatch-exporter
+  template:
+    metadata:
+      labels:
+        app: cloudwatch-exporter
+    spec:
+      containers:
+        - name: exporter
+          image: prom/cloudwatch-exporter
+          args:
+            - /config/config.yml
+          env:
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: aws-credentials
+                  key: AWS_ACCESS_KEY_ID
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: aws-credentials
+                  key: AWS_SECRET_ACCESS_KEY
+          ports:
+            - containerPort: 9106
+          volumeMounts:
+            - name: config
+              mountPath: /config
+      volumes:
+        - name: config
+          configMap:
+            name: cloudwatch-exporter-config
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cloudwatch-exporter-service
+  namespace: monitoring
+  labels:
+    app: cloudwatch-exporter
+spec:
+  type: ClusterIP
+  ports:
+    - port: 9106
+      targetPort: 9106
+      protocol: TCP
+      name: metrics
+  selector:
+    app: cloudwatch-exporter
